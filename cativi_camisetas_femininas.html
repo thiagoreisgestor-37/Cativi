@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cativi - Camisetas Femininas</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom Utility Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c4b5fd;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #5b21b6;
+        }
+
+        /* Modal Overlay Transitions */
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes pulseSuccess {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        .animate-pulse-success {
+            animation: pulseSuccess 1.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header Section -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                
+                <!-- Logo -->
+                <a href="#" onclick="resetFilters()" class="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-brand-600 dark:text-brand-400">
+                    <div class="bg-brand-600 text-white p-2 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <i class="fa-solid fa-shirt text-xl"></i>
+                    </div>
+                    <span>Cati<span class="text-slate-900 dark:text-white">vi</span></span>
+                </a>
+
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-xl items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-full px-4 py-2 border border-slate-200 dark:border-slate-700 focus-within:ring-2 focus-within:ring-brand-500 transition-all">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                    <input type="text" id="searchInput" oninput="handleSearchInput()" placeholder="Buscar T-shirts, Long Cut, Country..." class="w-full bg-transparent border-none text-sm focus:outline-none dark:text-white placeholder-slate-400">
+                    <button id="clearSearchBtn" onclick="clearSearch()" aria-label="Limpar busca" class="hidden text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Action Controls (Theme Toggle & Cart) -->
+                <div class="flex items-center gap-3">
+                    <!-- Theme Toggle Button -->
+                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Alternar Tema" aria-label="Alternar tema claro/escuro">
+                        <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+                    </button>
+
+                    <!-- Account Button -->
+                    <button onclick="openAuthModal()" aria-label="Minha conta" class="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold shadow-md shadow-brand-500/30 transition-colors">
+                        <i class="fa-solid fa-user"></i><span id="authBtnLabel" class="hidden sm:inline">Entrar</span>
+                    </button>
+
+                    <!-- Cart Toggle Button -->
+                    <button onclick="toggleCartDrawer()" aria-label="Abrir carrinho" class="relative p-2.5 rounded-full bg-brand-50 dark:bg-slate-800 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-slate-700 transition-colors">
+                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                        <span id="cartBadge" class="absolute -top-1 -right-1 bg-brand-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md scale-0 transition-transform duration-200">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="pb-3 md:hidden">
+                <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-200 dark:border-slate-700">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
+                    <input type="text" id="mobileSearchInput" oninput="handleMobileSearchInput()" placeholder="Buscar camisetas..." class="w-full bg-transparent text-sm focus:outline-none dark:text-white placeholder-slate-400">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+
+        <!-- Hero Promotional Banner -->
+        <section class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-r from-brand-900 via-brand-700 to-violet-800 text-white min-h-[320px] flex items-center">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
+            
+            <div class="relative z-10 p-8 sm:p-12 max-w-2xl space-y-4">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-violet-500/30 border border-violet-300/30 text-violet-100 backdrop-blur-md">
+                    <i class="fa-solid fa-gem text-violet-300"></i> Coleção Feminina 2026
+                </span>
+                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                    Estilo & Atitude com <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-200 to-fuchsia-100">Até 40% OFF</span>
+                </h1>
+                <p class="text-violet-100 text-sm sm:text-base leading-relaxed">
+                    Descubra nossa linha exclusiva de T-shirts, Long Cuts, peças Country com franjas e Croppeds modernos. Conforto e corte impecável para todas as ocasiões.
+                </p>
+                <div class="pt-2 flex flex-wrap gap-3">
+                    <a href="#catalog" class="px-6 py-3 rounded-xl bg-white text-brand-900 font-bold hover:bg-slate-100 shadow-lg hover:shadow-xl transition-all text-sm flex items-center gap-2">
+                        Ver Coleção <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                    <button onclick="applyCouponDirectly('DESCONTO10')" class="px-5 py-3 rounded-xl bg-brand-600/60 hover:bg-brand-600 border border-brand-400/30 font-medium backdrop-blur-md text-sm transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-ticket text-violet-200"></i> Cupom 10% OFF
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter & Control Toolbar Section -->
+        <section id="catalog" class="space-y-6">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight">Categorias em Destaque</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Escolha seu estilo favorito e renove seu guarda-roupa</p>
+                </div>
+
+                <!-- Category Pills -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none" id="categoryPills">
+                    <!-- Dynamic rendering by JS -->
+                </div>
+            </div>
+
+            <!-- Advanced Filter Toolbar -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700/60 flex flex-col md:flex-row items-center justify-between gap-4">
+                
+                <!-- Price Range Filter -->
+                <div class="w-full md:w-72 space-y-1">
+                    <div class="flex justify-between text-xs font-semibold text-slate-600 dark:text-slate-300">
+                        <span>Preço Máximo:</span>
+                        <span id="priceRangeValue" class="text-brand-600 dark:text-brand-400 font-bold">R$ 250</span>
+                    </div>
+                    <input type="range" id="priceRange" min="40" max="250" step="10" value="250" oninput="handlePriceChange(this.value)" class="w-full accent-brand-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg">
+                </div>
+
+                <!-- Sort Options & Reset -->
+                <div class="flex items-center justify-between w-full md:w-auto gap-3">
+                    <div class="flex items-center gap-2 text-sm">
+                        <label for="sortSelect" class="text-slate-500 dark:text-slate-400 font-medium whitespace-nowrap">Ordenar por:</label>
+                        <select id="sortSelect" onchange="handleSortChange(this.value)" class="bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white">
+                            <option value="popular">Mais Populares</option>
+                            <option value="price-asc">Menor Preço</option>
+                            <option value="price-desc">Maior Preço</option>
+                            <option value="rating">Melhor Avaliados</option>
+                        </select>
+                    </div>
+
+                    <button onclick="resetFilters()" class="text-xs font-medium text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 underline underline-offset-4 transition-colors">
+                        Limpar Filtros
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Grid Container -->
+        <section>
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Product cards injected dynamically via JavaScript -->
+            </div>
+
+            <!-- Empty Search State -->
+            <div id="emptyState" class="hidden py-16 text-center space-y-4">
+                <div class="w-20 h-20 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full flex items-center justify-center mx-auto text-3xl">
+                    <i class="fa-solid fa-shirt"></i>
+                </div>
+                <h3 class="text-xl font-bold">Nenhuma camiseta encontrada</h3>
+                <p class="text-slate-500 text-sm max-w-md mx-auto">Não encontramos itens correspondentes aos seus critérios de busca ou filtros aplicados.</p>
+                <button onclick="resetFilters()" class="px-5 py-2.5 bg-brand-600 text-white font-medium rounded-xl hover:bg-brand-700 transition-colors text-sm">
+                    Redefinir Filtros
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Slide-over Cart Drawer -->
+    <div id="cartDrawer" role="dialog" aria-modal="true" aria-label="Carrinho de compras" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
+        <!-- Backdrop -->
+        <div id="cartBackdrop" onclick="toggleCartDrawer()" class="absolute inset-0 modal-backdrop opacity-0 transition-opacity duration-300"></div>
+
+        <!-- Panel -->
+        <div id="cartPanel" class="absolute inset-y-0 right-0 max-w-full flex pl-10 transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto">
+            <div class="w-screen max-w-md bg-white dark:bg-slate-900 shadow-2xl flex flex-col">
+                
+                <!-- Drawer Header -->
+                <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-bag-shopping text-brand-600 dark:text-brand-400 text-xl"></i>
+                        <h2 class="text-lg font-bold">Seu Carrinho</h2>
+                        <span id="drawerCartCount" class="bg-brand-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 text-xs font-bold px-2.5 py-0.5 rounded-full">0 itens</span>
+                    </div>
+                    <button onclick="toggleCartDrawer()" aria-label="Fechar carrinho" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2 rounded-lg">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Drawer Body / Product List -->
+                <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <!-- Cart items rendered dynamically -->
+                </div>
+
+                <!-- Cart Bottom Calculations & Actions -->
+                <div class="p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 space-y-4">
+                    
+                    <!-- Coupon Form -->
+                    <div class="flex gap-2">
+                        <input type="text" id="couponInput" placeholder="Cupom (ex: DESCONTO10)" class="uppercase flex-1 px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white">
+                        <button onclick="applyCoupon()" class="px-4 py-2 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 text-white font-medium text-sm rounded-xl transition-colors">
+                            Aplicar
+                        </button>
+                    </div>
+                    <div id="couponMessage" class="text-xs font-semibold hidden"></div>
+
+                    <!-- Shipping Calculation -->
+                    <div class="flex gap-2 items-center">
+                        <input type="text" id="cepInput" placeholder="CEP para frete (00000-000)" maxlength="9" class="flex-1 px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white">
+                        <button onclick="calculateShipping()" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium text-sm rounded-xl transition-colors">
+                            Calcular
+                        </button>
+                    </div>
+
+                    <!-- Pricing Summary -->
+                    <div class="space-y-1.5 text-sm pt-2">
+                        <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                            <span>Subtotal</span>
+                            <span id="cartSubtotal">R$ 0,00</span>
+                        </div>
+                        <div id="discountRow" class="flex justify-between text-emerald-600 dark:text-emerald-400 hidden">
+                            <span>Desconto</span>
+                            <span id="cartDiscount">-R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                            <span>Frete</span>
+                            <span id="cartShipping">R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between text-base font-extrabold pt-2 border-t border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white">
+                            <span>Total</span>
+                            <span id="cartTotal" class="text-brand-600 dark:text-brand-400">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <!-- Checkout Button -->
+                    <button id="checkoutBtn" onclick="openCheckoutModal()" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-bold rounded-xl shadow-lg shadow-brand-500/25 transition-all text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span>Finalizar Compra</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div id="productModal" role="dialog" aria-modal="true" aria-label="Detalhes do produto" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6">
+        <div onclick="closeProductModal()" class="fixed inset-0 modal-backdrop transition-opacity"></div>
+        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800 z-10 animate-fade-in p-6 sm:p-8">
+            <button onclick="closeProductModal()" aria-label="Fechar" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div id="productModalContent">
+                <!-- Content injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Multi-Step Checkout Modal -->
+    <div id="checkoutModal" role="dialog" aria-modal="true" aria-label="Finalizar pedido" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6">
+        <div class="fixed inset-0 modal-backdrop transition-opacity"></div>
+        
+        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800 z-10 animate-fade-in p-6 sm:p-8">
+            
+            <!-- Modal Close Header -->
+            <div class="flex justify-between items-center pb-4 mb-6 border-b border-slate-200 dark:border-slate-800">
+                <h3 class="text-xl font-bold">Finalizar Pedido</h3>
+                <button onclick="closeCheckoutModal()" aria-label="Fechar" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Steps Progress Bar -->
+            <div class="flex items-center justify-between mb-8 px-4">
+                <div class="flex flex-col items-center gap-1">
+                    <div id="step1Circle" class="w-9 h-9 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center text-sm shadow-md">1</div>
+                    <span class="text-xs font-semibold">Endereço</span>
+                </div>
+                <div id="lineStep1" class="flex-1 h-1 bg-slate-200 dark:bg-slate-800 mx-2 transition-colors"></div>
+                <div class="flex flex-col items-center gap-1">
+                    <div id="step2Circle" class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-500 font-bold flex items-center justify-center text-sm transition-colors">2</div>
+                    <span class="text-xs font-semibold">Pagamento</span>
+                </div>
+                <div id="lineStep2" class="flex-1 h-1 bg-slate-200 dark:bg-slate-800 mx-2 transition-colors"></div>
+                <div class="flex flex-col items-center gap-1">
+                    <div id="step3Circle" class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-500 font-bold flex items-center justify-center text-sm transition-colors">3</div>
+                    <span class="text-xs font-semibold">Confirmação</span>
+                </div>
+            </div>
+
+            <!-- Step 1: Customer Data & Address -->
+            <div id="checkoutStep1" class="space-y-4">
+                <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-user text-brand-600"></i> Dados Pessoais & Entrega
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="custName" class="block text-xs font-medium text-slate-500 mb-1">Nome Completo</label>
+                        <input type="text" id="custName" placeholder="Nome e sobrenome" autocomplete="name" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">E-mail</label>
+                        <input type="email" id="custEmail" placeholder="voce@email.com" autocomplete="email" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">CPF</label>
+                        <input type="text" id="custCpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Telefone</label>
+                        <input type="text" id="custPhone" placeholder="(00) 00000-0000" inputmode="tel" maxlength="15" autocomplete="tel" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 dark:text-white">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Endereço de Entrega</label>
+                        <input type="text" id="custAddress" placeholder="Rua, número, complemento" autocomplete="street-address" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Cidade / UF</label>
+                        <input type="text" id="custCity" placeholder="Cidade / UF" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">CEP</label>
+                        <input type="text" id="custCep" placeholder="00000-000" inputmode="numeric" maxlength="9" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 dark:text-white">
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-end">
+                    <button onclick="goToStep(2)" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm transition-all flex items-center gap-2">
+                        Ir para Pagamento <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Payment Method -->
+            <div id="checkoutStep2" class="space-y-6 hidden">
+                <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-credit-card text-brand-600"></i> Método de Pagamento
+                </h4>
+
+                <!-- Tabs -->
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button" onclick="selectPaymentMethod('pix')" id="payTabPix" class="p-3 border-2 border-brand-600 bg-brand-50 dark:bg-slate-800 rounded-xl flex flex-col items-center gap-2 text-xs font-bold text-brand-600 dark:text-brand-400">
+                        <i class="fa-solid fa-qrcode text-xl"></i> Pix (Aprovação Instantânea)
+                    </button>
+                    <button type="button" onclick="selectPaymentMethod('card')" id="payTabCard" class="p-3 border-2 border-slate-200 dark:border-slate-700 rounded-xl flex flex-col items-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-slate-400">
+                        <i class="fa-solid fa-credit-card text-xl"></i> Cartão de Crédito
+                    </button>
+                    <button type="button" onclick="selectPaymentMethod('boleto')" id="payTabBoleto" class="p-3 border-2 border-slate-200 dark:border-slate-700 rounded-xl flex flex-col items-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-slate-400">
+                        <i class="fa-solid fa-barcode text-xl"></i> Boleto Bancário
+                    </button>
+                </div>
+
+                <!-- Payment Details View -->
+                <div class="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                    <!-- Pix Form View -->
+                    <div id="payFormPix" class="text-center space-y-3 py-2">
+                        <p class="text-xs text-slate-500">Escaneie o QR Code abaixo com o aplicativo do seu banco para pagar:</p>
+                        <div class="bg-white p-3 inline-block rounded-2xl shadow-md border border-slate-200">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=CativiPaymentPixMock" alt="QR Code Pix" class="w-36 h-36 mx-auto">
+                        </div>
+                        <div class="text-xs font-mono bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2 max-w-sm mx-auto">
+                            <span class="truncate">00020126360014BR.GOV.BCB.PIX0114Cativi123456</span>
+                            <button onclick="copyPixCode()" class="text-brand-600 font-bold hover:underline">Copiar</button>
+                        </div>
+                    </div>
+
+                    <!-- Credit Card Form View -->
+                    <div id="payFormCard" class="space-y-3 hidden">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Número do Cartão</label>
+                            <input type="text" placeholder="0000 0000 0000 0000" inputmode="numeric" maxlength="19" autocomplete="cc-number" class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl dark:text-white">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Validade</label>
+                                <input type="text" placeholder="MM/AA" maxlength="5" autocomplete="cc-exp" class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">CVV</label>
+                                <input type="text" placeholder="123" maxlength="4" inputmode="numeric" autocomplete="cc-csc" class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl dark:text-white">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Nome no Cartão</label>
+                            <input type="text" placeholder="Como está no cartão" autocomplete="cc-name" class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl dark:text-white">
+                        </div>
+                    </div>
+
+                    <!-- Boleto Form View -->
+                    <div id="payFormBoleto" class="text-center space-y-3 py-4 hidden">
+                        <i class="fa-solid fa-file-invoice-dollar text-4xl text-brand-600"></i>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto">O boleto será gerado após a confirmação. O prazo de vencimento é de 3 dias úteis.</p>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-between items-center">
+                    <button onclick="goToStep(1)" class="px-5 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium rounded-xl text-sm transition-all">
+                        Voltar
+                    </button>
+                    <button onclick="processOrder()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition-all flex items-center gap-2 shadow-lg shadow-emerald-600/30">
+                        Finalizar Compra <i class="fa-solid fa-check text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Success Screen -->
+            <div id="checkoutStep3" class="text-center space-y-6 py-4 hidden">
+                <div class="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto text-4xl animate-pulse-success shadow-lg">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">Pedido Confirmado!</h3>
+                    <p class="text-slate-500 text-sm mt-1">Obrigada por comprar na Cativi. Enviamos o comprovante para seu e-mail.</p>
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-left space-y-2 text-xs">
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Código do Pedido:</span>
+                        <span id="orderNumber" class="font-bold text-slate-900 dark:text-white">#CV-98234710</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Código de Rastreio:</span>
+                        <span id="trackingCode" class="font-bold text-brand-600 dark:text-brand-400">BR982347102CV</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Previsão de Entrega:</span>
+                        <span class="font-semibold text-slate-800 dark:text-slate-200">3 a 5 dias úteis</span>
+                    </div>
+                </div>
+
+                <button onclick="finishCheckout()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm shadow-lg transition-all">
+                    Continuar Comprando
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal (Login / Cadastro / Conta) -->
+    <div id="authModal" role="dialog" aria-modal="true" aria-label="Conta" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6">
+        <div onclick="closeAuthModal()" class="fixed inset-0 modal-backdrop"></div>
+        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800 z-10 animate-fade-in p-6 sm:p-8">
+            <button onclick="closeAuthModal()" aria-label="Fechar" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div id="authTabs" class="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl mb-6 mr-8">
+                <button type="button" id="tabLogin" onclick="showAuthView('login')" class="py-2 rounded-lg text-sm font-bold transition-all">Entrar</button>
+                <button type="button" id="tabRegister" onclick="showAuthView('register')" class="py-2 rounded-lg text-sm font-bold transition-all">Criar conta</button>
+            </div>
+            <p id="authNotice" class="hidden text-xs font-semibold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-slate-800 rounded-xl px-3 py-2 mb-4"></p>
+
+            <div id="authLogin" class="space-y-4">
+                <h3 class="text-xl font-extrabold">Bem-vinda de volta!</h3>
+                <div class=""><label for="loginEmail" class="block text-xs font-medium text-slate-500 mb-1">E-mail</label><input type="email" id="loginEmail" placeholder="voce@email.com" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" autocomplete="email"></div>
+                <div class=""><label for="loginPass" class="block text-xs font-medium text-slate-500 mb-1">Senha</label><input type="password" id="loginPass" placeholder="Sua senha" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" autocomplete="current-password"></div>
+                <button onclick="doLogin()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm shadow-lg shadow-brand-500/25 transition-all">Entrar</button>
+                <p class="text-xs text-center text-slate-500">Ainda não tem conta? <button type="button" onclick="showAuthView('register')" class="font-bold text-brand-600 dark:text-brand-400 hover:underline">Cadastre-se</button></p>
+            </div>
+
+            <div id="authRegister" class="space-y-4 hidden">
+                <div><h3 class="text-xl font-extrabold">Crie sua conta</h3><p class="text-xs text-slate-500 mt-1">Rápido e gratuito. Seus dados agilizam o checkout.</p></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="sm:col-span-2"><label for="regName" class="block text-xs font-medium text-slate-500 mb-1">Nome completo</label><input type="text" id="regName" placeholder="Nome e sobrenome" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" autocomplete="name"></div>
+                    <div class=""><label for="regEmail" class="block text-xs font-medium text-slate-500 mb-1">E-mail</label><input type="email" id="regEmail" placeholder="voce@email.com" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" autocomplete="email"></div>
+                    <div class=""><label for="regPhone" class="block text-xs font-medium text-slate-500 mb-1">Telefone</label><input type="text" id="regPhone" placeholder="(00) 00000-0000" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" inputmode="tel" maxlength="15" autocomplete="tel"></div>
+                    <div class=""><label for="regCpf" class="block text-xs font-medium text-slate-500 mb-1">CPF</label><input type="text" id="regCpf" placeholder="000.000.000-00" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" inputmode="numeric" maxlength="14"></div>
+                    <div class=""><label for="regCep" class="block text-xs font-medium text-slate-500 mb-1">CEP (opcional)</label><input type="text" id="regCep" placeholder="00000-000" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" inputmode="numeric" maxlength="9" autocomplete="postal-code"></div>
+                    <div class="sm:col-span-2"><label for="regAddress" class="block text-xs font-medium text-slate-500 mb-1">Endereço (opcional)</label><input type="text" id="regAddress" placeholder="Rua, número, complemento" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" autocomplete="street-address"></div>
+                    <div class="sm:col-span-2"><label for="regCity" class="block text-xs font-medium text-slate-500 mb-1">Cidade / UF (opcional)</label><input type="text" id="regCity" placeholder="Cidade / UF" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" ></div>
+                    <div class=""><label for="regPass" class="block text-xs font-medium text-slate-500 mb-1">Senha</label><input type="password" id="regPass" placeholder="Mínimo 8 caracteres" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" autocomplete="new-password"></div>
+                    <div class=""><label for="regPass2" class="block text-xs font-medium text-slate-500 mb-1">Confirmar senha</label><input type="password" id="regPass2" placeholder="Repita a senha" class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 dark:text-white" autocomplete="new-password"></div>
+                </div>
+                <label class="flex items-start gap-2 text-xs text-slate-500"><input type="checkbox" id="regTerms" class="mt-0.5 accent-brand-600"><span>Li e aceito os termos de uso e a política de privacidade (LGPD).</span></label>
+                <button onclick="doRegister()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm shadow-lg shadow-brand-500/25 transition-all">Criar conta</button>
+            </div>
+
+            <div id="authAccount" class="space-y-4 hidden">
+                <div class="flex items-center gap-3">
+                    <div id="accAvatar" class="w-14 h-14 rounded-full bg-brand-600 text-white text-xl font-extrabold flex items-center justify-center"></div>
+                    <div class="min-w-0"><h3 id="accName" class="text-lg font-extrabold truncate"></h3><p id="accEmail" class="text-xs text-slate-500 truncate"></p></div>
+                </div>
+                <div id="accDetails" class="bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 text-xs space-y-1.5"></div>
+                <div class="flex gap-3">
+                    <button onclick="closeAuthModal()" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm transition-all">Continuar comprando</button>
+                    <button onclick="doLogout()" class="px-5 py-2.5 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold rounded-xl text-sm transition-all">Sair</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Box -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i id="toastIcon" class="fa-solid fa-circle-info text-brand-400"></i>
+        <span id="toastMessage" class="text-sm font-medium">Ação realizada com sucesso!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-12 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2 text-xl font-extrabold text-brand-600 dark:text-brand-400">
+                        <i class="fa-solid fa-shirt"></i> Cativi
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Sua loja especializada em camisetas femininas. T-shirts, Long Cuts, moda Country e Croppeds com alta qualidade e entrega para todo o Brasil.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm mb-3">Categorias</h4>
+                    <ul class="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                        <li><a href="#catalog" onclick="filterByCategory('T-shirt')" class="hover:underline">T-shirts</a></li>
+                        <li><a href="#catalog" onclick="filterByCategory('Long Cut')" class="hover:underline">Long Cuts</a></li>
+                        <li><a href="#catalog" onclick="filterByCategory('Country')" class="hover:underline">Estilo Country</a></li>
+                        <li><a href="#catalog" onclick="filterByCategory('Cropped')" class="hover:underline">Croppeds</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm mb-3">Atendimento</h4>
+                    <ul class="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                        <li><a href="#" class="hover:underline">Central de Ajuda</a></li>
+                        <li><a href="#" class="hover:underline">Trocas e Devoluções</a></li>
+                        <li><a href="#" class="hover:underline">Guia de Tamanhos</a></li>
+                        <li><a href="#" class="hover:underline">Políticas de Privacidade</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-3">
+                    <h4 class="font-bold text-sm">Formas de Pagamento</h4>
+                    <div class="flex gap-3 text-2xl text-slate-400">
+                        <i class="fa-brands fa-cc-visa" title="Visa"></i>
+                        <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
+                        <i class="fa-solid fa-qrcode" title="Pix"></i>
+                        <i class="fa-solid fa-barcode" title="Boleto"></i>
+                    </div>
+                    <p class="text-xs text-slate-400 pt-2">© 2026 Cativi. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Global Product Catalog Data
+        const products = [
+            {
+                id: 1,
+                name: "T-Shirt Básica Algodão Egípcio",
+                category: "T-shirt",
+                price: 89.90,
+                originalPrice: 119.90,
+                rating: 4.9,
+                reviewsCount: 342,
+                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=600&auto=format&fit=crop",
+                badge: "Mais Vendida",
+                description: "Nossa T-shirt clássica feita com algodão egípcio de altíssima qualidade. Toque ultra macio, caimento perfeito e durabilidade para o dia a dia.",
+                colors: ["#ffffff", "#000000", "#fb7185"],
+                sizes: ["PP", "P", "M", "G", "GG"]
+            },
+            {
+                id: 2,
+                name: "Long Cut Despojada Fenda Lateral",
+                category: "Long Cut",
+                price: 119.90,
+                originalPrice: 149.90,
+                rating: 4.7,
+                reviewsCount: 128,
+                image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=600&auto=format&fit=crop",
+                badge: "Tendência",
+                description: "Modelagem alongada com fendas laterais estilosas. Dá um visual fluido e moderno, perfeita para usar com legging ou jeans justo.",
+                colors: ["#9ca3af", "#000000"],
+                sizes: ["P", "M", "G"]
+            },
+            {
+                id: 3,
+                name: "T-Shirt Country com Franjas",
+                category: "Country",
+                price: 159.90,
+                originalPrice: 199.90,
+                rating: 4.8,
+                reviewsCount: 85,
+                image: "https://images.unsplash.com/photo-1534126416832-a88fdf2911c2?q=80&w=600&auto=format&fit=crop",
+                badge: "Exclusivo",
+                description: "Estilo rodeio e country moderno com franjas trabalhadas nas mangas e costas. Tecido respirável e caimento impecável.",
+                colors: ["#8b5cf6", "#1e293b"],
+                sizes: ["P", "M", "G", "GG"]
+            },
+            {
+                id: 4,
+                name: "Cropped Amarração Frontal",
+                category: "Cropped",
+                price: 79.90,
+                originalPrice: 99.90,
+                rating: 4.6,
+                reviewsCount: 210,
+                image: "https://images.unsplash.com/photo-1603344797033-f0f4f587ab60?q=80&w=600&auto=format&fit=crop",
+                badge: "Verão",
+                description: "Cropped jovial com amarração na frente. Leve, versátil e ideal para compor looks de cintura alta no verão.",
+                colors: ["#fef08a", "#ffffff", "#f43f5e"],
+                sizes: ["PP", "P", "M"]
+            },
+            {
+                id: 5,
+                name: "T-Shirt Estampa Vintage Rock",
+                category: "T-shirt",
+                price: 99.90,
+                originalPrice: 129.90,
+                rating: 4.9,
+                reviewsCount: 415,
+                image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=600&auto=format&fit=crop",
+                badge: "Novo",
+                description: "Estampa exclusiva em silk estilo retro/vintage. Corte unissex levemente oversized para garantir máximo estilo.",
+                colors: ["#1e293b", "#ffffff"],
+                sizes: ["P", "M", "G", "GG"]
+            },
+            {
+                id: 6,
+                name: "Long Cut Básica Canelada",
+                category: "Long Cut",
+                price: 109.90,
+                originalPrice: 139.90,
+                rating: 4.5,
+                reviewsCount: 92,
+                image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=600&auto=format&fit=crop",
+                badge: "Essencial",
+                description: "Tecido canelado ajustado ao corpo com toque aveludado. Peça chave para sobreposições estilosas.",
+                colors: ["#d1d5db", "#0f172a", "#be123c"],
+                sizes: ["P", "M", "G"]
+            },
+            {
+                id: 7,
+                name: "T-Shirt Country Brilho Strass",
+                category: "Country",
+                price: 189.90,
+                originalPrice: 229.90,
+                rating: 4.8,
+                reviewsCount: 56,
+                image: "https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?q=80&w=600&auto=format&fit=crop",
+                badge: "Premium",
+                description: "Brilhe nos festivais e arenas! Aplicações manuais de strass com brilho intenso em estampa western de alta resistência.",
+                colors: ["#000000", "#ffffff"],
+                sizes: ["P", "M", "G"]
+            },
+            {
+                id: 8,
+                name: "Cropped Liso Gola Alta",
+                category: "Cropped",
+                price: 69.90,
+                originalPrice: 89.90,
+                rating: 4.7,
+                reviewsCount: 174,
+                image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop",
+                badge: "Destaque",
+                description: "Gola alta minimalista e tecido encorpado sem transparência. Combina com blazer, jaqueta de couro ou calça pantalona.",
+                colors: ["#000000", "#ffffff", "#be123c"],
+                sizes: ["PP", "P", "M", "G"]
+            }
+        ];
+
+        // State variables
+        let cart = [];
+        let selectedCategory = "Todas";
+        let maxPrice = 250;
+        let searchQuery = "";
+        let currentSort = "popular";
+        let appliedCoupon = null;
+        let shippingCost = 0;
+        let shippingBase = 0;
+        let shippingCalculated = false;
+        const FREE_SHIPPING_MIN = 200;
+        try { const saved = JSON.parse(localStorage.getItem("cativi_cart") || "[]"); if (Array.isArray(saved)) cart = saved; } catch (e) {}
+        let currentCheckoutStep = 1;
+        let selectedPayment = 'pix';
+
+        const categories = ["Todas", "T-shirt", "Long Cut", "Country", "Cropped"];
+
+        // Initialization on DOM Load
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCategoryPills();
+            renderProducts();
+            updateCartUI();
+        });
+
+        // Theme Toggle Functionality
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeIcon.className = 'fa-solid fa-moon text-lg';
+            } else {
+                html.classList.add('dark');
+                themeIcon.className = 'fa-solid fa-sun text-lg text-amber-400';
+            }
+        }
+
+        // Render Category Filter Pills
+        function renderCategoryPills() {
+            const container = document.getElementById("categoryPills");
+            container.innerHTML = categories.map(cat => {
+                const activeClass = selectedCategory === cat 
+                    ? "bg-brand-600 text-white shadow-md shadow-brand-500/30" 
+                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700";
+                return `
+                    <button onclick="filterByCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${activeClass}">
+                        ${cat}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Filter Handlers
+        function filterByCategory(cat) {
+            selectedCategory = cat;
+            renderCategoryPills();
+            renderProducts();
+        }
+
+        function handlePriceChange(val) {
+            maxPrice = parseFloat(val);
+            document.getElementById("priceRangeValue").innerText = `R$ ${maxPrice}`;
+            renderProducts();
+        }
+
+        function handleSearchInput() {
+            searchQuery = document.getElementById("searchInput").value.toLowerCase();
+            const clearBtn = document.getElementById("clearSearchBtn");
+            if (searchQuery) {
+                clearBtn.classList.remove("hidden");
+            } else {
+                clearBtn.classList.add("hidden");
+            }
+            renderProducts();
+        }
+
+        function handleMobileSearchInput() {
+            searchQuery = document.getElementById("mobileSearchInput").value.toLowerCase();
+            renderProducts();
+        }
+
+        function clearSearch() {
+            searchQuery = "";
+            document.getElementById("searchInput").value = "";
+            document.getElementById("mobileSearchInput").value = "";
+            document.getElementById("clearSearchBtn").classList.add("hidden");
+            renderProducts();
+        }
+
+        function handleSortChange(val) {
+            currentSort = val;
+            renderProducts();
+        }
+
+        function resetFilters() {
+            selectedCategory = "Todas";
+            maxPrice = 250;
+            searchQuery = "";
+            currentSort = "popular";
+            document.getElementById("priceRange").value = 250;
+            document.getElementById("priceRangeValue").innerText = "R$ 250";
+            document.getElementById("sortSelect").value = "popular";
+            clearSearch();
+            renderCategoryPills();
+            renderProducts();
+        }
+
+        // Get Filtered Products
+        function getFilteredProducts() {
+            let list = products.filter(p => {
+                const matchesCategory = selectedCategory === "Todas" || p.category === selectedCategory;
+                const matchesPrice = p.price <= maxPrice;
+                const matchesSearch = p.name.toLowerCase().includes(searchQuery) || p.category.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesPrice && matchesSearch;
+            });
+
+            if (currentSort === "price-asc") {
+                list.sort((a, b) => a.price - b.price);
+            } else if (currentSort === "price-desc") {
+                list.sort((a, b) => b.price - a.price);
+            } else if (currentSort === "rating") {
+                list.sort((a, b) => b.rating - a.rating);
+            }
+
+            return list;
+        }
+
+        // Render Product Cards
+        function renderProducts() {
+            const grid = document.getElementById("productGrid");
+            const emptyState = document.getElementById("emptyState");
+            const filtered = getFilteredProducts();
+
+            if (filtered.length === 0) {
+                grid.innerHTML = "";
+                emptyState.classList.remove("hidden");
+                return;
+            }
+
+            emptyState.classList.add("hidden");
+            grid.innerHTML = filtered.map(product => `
+                <div class="group bg-white dark:bg-slate-800/90 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-700/60 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <!-- Image Container -->
+                        <div class="relative overflow-hidden bg-slate-100 dark:bg-slate-700 aspect-[4/5]">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                            
+                            <!-- Badges -->
+                            <span class="absolute top-3 left-3 bg-brand-600/90 backdrop-blur-md text-white text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-lg shadow-md">
+                                ${product.badge}
+                            </span>
+
+                            <!-- Quick Action Button -->
+                            <button onclick="openProductModal(${product.id})" aria-label="Ver detalhes de ${product.name}" class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-white flex items-center justify-center opacity-0 [@media(hover:none)]:opacity-100 focus:opacity-100 group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-lg">
+                                <i class="fa-solid fa-eye text-sm"></i>
+                            </button>
+                        </div>
+
+                        <!-- Card Info -->
+                        <div class="p-5 space-y-2">
+                            <div class="flex items-center justify-between text-xs text-slate-400">
+                                <span class="font-semibold text-brand-600 dark:text-brand-400">${product.category}</span>
+                                <div class="flex items-center gap-1 text-amber-500 font-bold">
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <span>${product.rating} (${product.reviewsCount})</span>
+                                </div>
+                            </div>
+
+                            <h3 class="font-bold text-slate-900 dark:text-white text-base line-clamp-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                                ${product.name}
+                            </h3>
+
+                            <p class="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 leading-relaxed">
+                                ${product.description}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer & Price -->
+                    <div class="px-5 pb-5 pt-0 flex items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-700/50 mt-2 pt-3">
+                        <div>
+                            <span class="text-xs text-slate-400 line-through">R$ ${product.originalPrice.toFixed(2).replace('.', ',')}</span>
+                            <div class="text-lg font-extrabold text-slate-900 dark:text-white">
+                                R$ ${product.price.toFixed(2).replace('.', ',')}
+                            </div>
+                        </div>
+
+                        <button onclick="quickAddToCart(${product.id})" class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-bold text-xs shadow-md shadow-brand-500/20 transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus text-xs"></i> Comprar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Product Quick View Modal
+        function openProductModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            const modalContent = document.getElementById("productModalContent");
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 aspect-[4/5]">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-4">
+                        <span class="text-xs font-bold px-2.5 py-1 bg-brand-100 text-brand-600 dark:bg-slate-800 dark:text-brand-400 rounded-lg">
+                            ${product.category}
+                        </span>
+                        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">${product.name}</h2>
+                        
+                        <div class="flex items-center gap-2 text-sm text-amber-500 font-bold">
+                            <i class="fa-solid fa-star"></i>
+                            <span>${product.rating}</span>
+                            <span class="text-slate-400 font-normal">(${product.reviewsCount} avaliações de clientes)</span>
+                        </div>
+
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            ${product.description}
+                        </p>
+
+                        <!-- Size Selector -->
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold uppercase text-slate-500">Tamanho:</label>
+                            <div class="flex gap-2" id="modalSizes">
+                                ${product.sizes.map((s, idx) => `
+                                    <button type="button" onclick="selectModalSize(this)" class="size-btn px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${idx === 1 ? 'border-brand-600 bg-brand-50 text-brand-600 dark:bg-slate-800 dark:text-brand-400' : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'}">
+                                        ${s}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Price Section -->
+                        <div class="pt-2">
+                            <span class="text-xs text-slate-400 line-through">De R$ ${product.originalPrice.toFixed(2).replace('.', ',')}</span>
+                            <div class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">
+                                R$ ${product.price.toFixed(2).replace('.', ',')}
+                            </div>
+                            <span class="text-xs text-emerald-600 font-semibold">Em até 3x sem juros de R$ ${(product.price / 3).toFixed(2).replace('.', ',')}</span>
+                        </div>
+
+                        <button onclick="addModalItemToCart(${product.id})" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg shadow-brand-500/30 transition-all text-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-bag-shopping"></i> Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("productModal").classList.remove("hidden");
+        }
+
+        function closeProductModal() {
+            document.getElementById("productModal").classList.add("hidden");
+        }
+
+        function selectModalSize(btn) {
+            document.querySelectorAll(".size-btn").forEach(b => {
+                b.classList.remove("border-brand-600", "bg-brand-50", "text-brand-600", "dark:bg-slate-800", "dark:text-brand-400");
+                b.classList.add("border-slate-200", "dark:border-slate-700", "text-slate-700", "dark:text-slate-300");
+            });
+            btn.classList.add("border-brand-600", "bg-brand-50", "text-brand-600", "dark:bg-slate-800", "dark:text-brand-400");
+            btn.classList.remove("border-slate-200", "dark:border-slate-700");
+        }
+
+        function addModalItemToCart(id) {
+            const selectedSizeBtn = document.querySelector(".size-btn.border-brand-600");
+            const size = selectedSizeBtn ? selectedSizeBtn.innerText.trim() : "M";
+            addToCart(id, size);
+            closeProductModal();
+        }
+
+        // Cart Operations
+        function quickAddToCart(id) {
+            addToCart(id, "M");
+        }
+
+        function addToCart(productId, size = "M") {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingIndex = cart.findIndex(item => item.id === productId && item.size === size);
+
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    size: size,
+                    qty: 1
+                });
+            }
+
+            updateCartUI();
+            showToast(`"${product.name}" adicionado ao carrinho!`, "fa-solid fa-check-circle");
+        }
+
+        function updateCartQty(index, change) {
+            if (cart[index]) {
+                cart[index].qty += change;
+                if (cart[index].qty <= 0) {
+                    cart.splice(index, 1);
+                }
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById("cartBadge");
+            const drawerCount = document.getElementById("drawerCartCount");
+            const container = document.getElementById("cartItemsContainer");
+            const checkoutBtn = document.getElementById("checkoutBtn");
+
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            
+            badge.innerText = totalItems;
+            if (totalItems > 0) {
+                badge.classList.remove("scale-0");
+                badge.classList.add("scale-100");
+            } else {
+                badge.classList.remove("scale-100");
+                badge.classList.add("scale-0");
+            }
+
+            drawerCount.innerText = `${totalItems} ${totalItems === 1 ? 'item' : 'itens'}`;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 space-y-3">
+                        <i class="fa-solid fa-basket-shopping text-4xl text-slate-300 dark:text-slate-700"></i>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Seu carrinho está vazio.</p>
+                        <button onclick="toggleCartDrawer()" class="text-xs text-brand-600 font-bold hover:underline">
+                            Explorar produtos
+                        </button>
+                    </div>
+                `;
+                checkoutBtn.disabled = true;
+            } else {
+                checkoutBtn.disabled = false;
+                container.innerHTML = cart.map((item, idx) => `
+                    <div class="flex items-center gap-3 bg-slate-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-slate-200/60 dark:border-slate-700/60">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-xl bg-slate-200">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-xs text-slate-900 dark:text-white truncate">${item.name}</h4>
+                            <span class="text-[10px] text-slate-400 block mb-1">Tam: ${item.size}</span>
+                            <span class="font-extrabold text-xs text-brand-600 dark:text-brand-400">R$ ${item.price.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <button onclick="removeFromCart(${idx})" class="text-slate-400 hover:text-red-500 text-xs">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                            <div class="flex items-center border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-xs">
+                                <button onclick="updateCartQty(${idx}, -1)" class="px-2 py-0.5 hover:bg-slate-100 dark:hover:bg-slate-800">-</button>
+                                <span class="px-2 font-bold">${item.qty}</span>
+                                <button onclick="updateCartQty(${idx}, 1)" class="px-2 py-0.5 hover:bg-slate-100 dark:hover:bg-slate-800">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            calculateCartTotals();
+        }
+
+        function calculateCartTotals() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            try { localStorage.setItem("cativi_cart", JSON.stringify(cart)); } catch (e) {}
+            shippingCost = shippingCalculated && subtotal < FREE_SHIPPING_MIN ? shippingBase : 0;
+            let discount = 0;
+
+            if (appliedCoupon === "DESCONTO10") {
+                discount = subtotal * 0.10;
+            } else if (appliedCoupon === "TEE15") {
+                discount = subtotal * 0.15;
+            }
+
+            const total = Math.max(0, subtotal - discount + shippingCost);
+
+            document.getElementById("cartSubtotal").innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            
+            const discountRow = document.getElementById("discountRow");
+            if (discount > 0) {
+                discountRow.classList.remove("hidden");
+                document.getElementById("cartDiscount").innerText = `-R$ ${discount.toFixed(2).replace('.', ',')}`;
+            } else {
+                discountRow.classList.add("hidden");
+            }
+
+            document.getElementById("cartShipping").innerText = shippingCost > 0 ? `R$ ${shippingCost.toFixed(2).replace('.', ',')}` : (shippingCalculated ? "Grátis" : "A calcular");
+            document.getElementById("cartTotal").innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById("cartDrawer");
+            const backdrop = document.getElementById("cartBackdrop");
+            const panel = document.getElementById("cartPanel");
+
+            if (panel.classList.contains("translate-x-full")) {
+                drawer.classList.remove("pointer-events-none");
+                backdrop.classList.remove("opacity-0");
+                backdrop.classList.add("opacity-100");
+                panel.classList.remove("translate-x-full");
+            } else {
+                panel.classList.add("translate-x-full");
+                backdrop.classList.remove("opacity-100");
+                backdrop.classList.add("opacity-0");
+                setTimeout(() => drawer.classList.add("pointer-events-none"), 300);
+            }
+        }
+
+        // Coupons
+        const COUPONS = { DESCONTO10: 10, TEE15: 15 };
+
+        function applyCoupon() {
+            const code = document.getElementById("couponInput").value.trim().toUpperCase();
+            const msg = document.getElementById("couponMessage");
+            msg.classList.remove("hidden", "text-emerald-600", "text-red-500");
+            if (COUPONS[code]) {
+                appliedCoupon = code;
+                msg.innerText = `Cupom ${code} aplicado: ${COUPONS[code]}% de desconto!`;
+                msg.classList.add("text-emerald-600");
+            } else {
+                appliedCoupon = null;
+                msg.innerText = code ? "Cupom inválido ou expirado." : "Digite um código de cupom.";
+                msg.classList.add("text-red-500");
+            }
+            calculateCartTotals();
+        }
+
+        function applyCouponDirectly(code) {
+            document.getElementById("couponInput").value = code;
+            applyCoupon();
+            showToast(`Cupom ${code} aplicado!`, "fa-solid fa-ticket");
+        }
+
+        // Input masks
+        function maskDigits(el, pattern) {
+            const d = el.value.replace(/\D/g, "");
+            let out = "", i = 0;
+            for (const ch of pattern) {
+                if (i >= d.length) break;
+                out += ch === "#" ? d[i++] : ch;
+            }
+            el.value = out;
+        }
+        document.addEventListener("input", (e) => {
+            const id = e.target.id;
+            if (id === "cepInput" || id === "custCep" || id === "regCep") maskDigits(e.target, "#####-###");
+            else if (id === "custCpf" || id === "regCpf") maskDigits(e.target, "###.###.###-##");
+            else if (id === "custPhone" || id === "regPhone") maskDigits(e.target, e.target.value.replace(/\D/g, "").length > 10 ? "(##) #####-####" : "(##) ####-####");
+        });
+
+        // Shipping (simulated: SP capital region cheaper; free above R$ 200)
+        function calculateShipping() {
+            const cep = document.getElementById("cepInput").value.replace(/\D/g, "");
+            if (cep.length !== 8) {
+                showToast("Informe um CEP válido com 8 dígitos.", "fa-solid fa-triangle-exclamation");
+                return;
+            }
+            shippingBase = cep.startsWith("1") ? 14.90 : 24.90;
+            shippingCalculated = true;
+            calculateCartTotals();
+            showToast(`Frete calculado! Grátis acima de R$ ${FREE_SHIPPING_MIN},00.`, "fa-solid fa-truck-fast");
+        }
+
+        // Checkout
+        function openCheckoutModal() {
+            if (cart.length === 0) return;
+            if (!currentUser) {
+                pendingCheckout = true;
+                openAuthModal("register", "Crie sua conta ou entre para finalizar a compra.");
+                return;
+            }
+            prefillCheckout();
+            if (!shippingCalculated) {
+                const cep = document.getElementById("cepInput").value.replace(/\D/g, "");
+                if (cep.length === 8) calculateShipping();
+            }
+            toggleCartDrawer();
+            document.getElementById("checkoutModal").classList.remove("hidden");
+            goToStep(1);
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById("checkoutModal").classList.add("hidden");
+        }
+
+        function validateStep1() {
+            const v = id => document.getElementById(id).value.trim();
+            const checks = [
+                [v("custName").split(/\s+/).length >= 2, "custName", "Informe nome e sobrenome."],
+                [/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("custEmail")), "custEmail", "E-mail inválido."],
+                [v("custCpf").replace(/\D/g, "").length === 11, "custCpf", "CPF deve ter 11 dígitos."],
+                [v("custPhone").replace(/\D/g, "").length >= 10, "custPhone", "Telefone inválido."],
+                [v("custAddress").length >= 5, "custAddress", "Informe o endereço de entrega."],
+                [v("custCity").length >= 2, "custCity", "Informe cidade e UF."],
+                [v("custCep").replace(/\D/g, "").length === 8, "custCep", "CEP inválido."]
+            ];
+            for (const [ok, id, msg] of checks) {
+                if (!ok) {
+                    document.getElementById(id).focus();
+                    showToast(msg, "fa-solid fa-triangle-exclamation");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function goToStep(step) {
+            if (step === 2 && !validateStep1()) return;
+            currentCheckoutStep = step;
+            [1, 2, 3].forEach(n => {
+                document.getElementById(`checkoutStep${n}`).classList.toggle("hidden", n !== step);
+                const circle = document.getElementById(`step${n}Circle`);
+                const active = n <= step;
+                circle.classList.toggle("bg-brand-600", active);
+                circle.classList.toggle("text-white", active);
+                circle.classList.toggle("shadow-md", active);
+                circle.classList.toggle("bg-slate-200", !active);
+                circle.classList.toggle("dark:bg-slate-800", !active);
+                circle.classList.toggle("text-slate-500", !active);
+            });
+            [1, 2].forEach(n => {
+                const line = document.getElementById(`lineStep${n}`);
+                line.classList.toggle("bg-brand-600", step > n);
+                line.classList.toggle("bg-slate-200", step <= n);
+                line.classList.toggle("dark:bg-slate-800", step <= n);
+            });
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPayment = method;
+            const tabs = { pix: "payTabPix", card: "payTabCard", boleto: "payTabBoleto" };
+            const forms = { pix: "payFormPix", card: "payFormCard", boleto: "payFormBoleto" };
+            const on = ["border-brand-600", "bg-brand-50", "dark:bg-slate-800", "text-brand-600", "dark:text-brand-400"];
+            const off = ["border-slate-200", "dark:border-slate-700", "text-slate-600", "dark:text-slate-300"];
+            Object.keys(tabs).forEach(k => {
+                const tab = document.getElementById(tabs[k]);
+                tab.classList.remove(...on, ...off);
+                tab.classList.add(...(k === method ? on : off));
+                document.getElementById(forms[k]).classList.toggle("hidden", k !== method);
+            });
+        }
+
+        function copyPixCode() {
+            const code = "00020126360014BR.GOV.BCB.PIX0114Cativi123456";
+            const done = () => showToast("Código Pix copiado!", "fa-solid fa-copy");
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code).then(done).catch(() => showToast("Não foi possível copiar.", "fa-solid fa-triangle-exclamation"));
+            } else {
+                showToast("Não foi possível copiar.", "fa-solid fa-triangle-exclamation");
+            }
+        }
+
+        function processOrder() {
+            if (selectedPayment === "card") {
+                const empty = [...document.querySelectorAll("#payFormCard input")].find(i => !i.value.trim());
+                if (empty) {
+                    empty.focus();
+                    showToast("Preencha os dados do cartão.", "fa-solid fa-triangle-exclamation");
+                    return;
+                }
+            }
+            const n = Math.floor(10000000 + Math.random() * 90000000);
+            document.getElementById("orderNumber").innerText = `#CV-${n}`;
+            document.getElementById("trackingCode").innerText = `BR${n}CV`;
+            goToStep(3);
+            cart = [];
+            appliedCoupon = null;
+            updateCartUI();
+        }
+
+        function finishCheckout() {
+            closeCheckoutModal();
+            goToStep(1);
+            shippingCalculated = false;
+            shippingBase = 0;
+            document.getElementById("couponInput").value = "";
+            document.getElementById("couponMessage").classList.add("hidden");
+            calculateCartTotals();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        // Toast
+        let toastTimer;
+        function showToast(message, iconClass = "fa-solid fa-circle-info") {
+            const toast = document.getElementById("toast");
+            document.getElementById("toastMessage").innerText = message;
+            document.getElementById("toastIcon").className = `${iconClass} text-brand-400`;
+            toast.setAttribute("role", "status");
+            toast.classList.remove("translate-y-20", "opacity-0");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.add("translate-y-20", "opacity-0"), 2800);
+        }
+
+        // ===== Conta do cliente (demonstração no navegador) =====
+        // ATENÇÃO: os dados ficam só no localStorage deste navegador. Em produção, cadastro e login
+        // devem ir para um servidor (banco de dados, senha com bcrypt/argon2, HTTPS).
+        const USERS_KEY = "cativi_users", SESSION_KEY = "cativi_session";
+        let currentUser = null, pendingCheckout = false;
+        const loadUsers = () => { try { return JSON.parse(localStorage.getItem(USERS_KEY) || "{}"); } catch (e) { return {}; } };
+        try { const em = localStorage.getItem(SESSION_KEY); if (em) currentUser = loadUsers()[em] || null; } catch (e) {}
+
+        async function hashPw(pw, salt) {
+            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(salt + pw));
+            return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+        }
+        function validCpf(c) {
+            c = c.replace(/\D/g, "");
+            if (c.length !== 11 || /^(\d)\1+$/.test(c)) return false;
+            for (let t = 9; t < 11; t++) {
+                let sum = 0;
+                for (let i = 0; i < t; i++) sum += c[i] * (t + 1 - i);
+                if (((sum * 10) % 11) % 10 != c[t]) return false;
+            }
+            return true;
+        }
+        const $ = id => document.getElementById(id);
+        const val = id => $(id).value.trim();
+        function authError(id, msg) { $(id).focus(); showToast(msg, "fa-solid fa-triangle-exclamation"); }
+
+        function updateAuthUI() {
+            $("authBtnLabel").innerText = currentUser ? currentUser.name.split(" ")[0] : "Entrar";
+        }
+        function openAuthModal(view, notice) {
+            showAuthView(currentUser ? "account" : (view || "login"));
+            const n = $("authNotice");
+            n.innerText = notice || "";
+            n.classList.toggle("hidden", !notice);
+            $("authModal").classList.remove("hidden");
+        }
+        function closeAuthModal() { $("authModal").classList.add("hidden"); pendingCheckout = false; }
+        function showAuthView(view) {
+            ["login", "register", "account"].forEach(v => $("auth" + v[0].toUpperCase() + v.slice(1)).classList.toggle("hidden", v !== view));
+            $("authTabs").classList.toggle("hidden", view === "account");
+            const on = ["bg-white", "dark:bg-slate-900", "text-brand-600", "dark:text-brand-400", "shadow"], off = ["text-slate-500"];
+            [["tabLogin", "login"], ["tabRegister", "register"]].forEach(([id, v]) => {
+                $(id).classList.remove(...on, ...off);
+                $(id).classList.add(...(v === view ? on : off));
+            });
+            if (view === "account" && currentUser) {
+                $("accAvatar").innerText = currentUser.name[0].toUpperCase();
+                $("accName").innerText = currentUser.name;
+                $("accEmail").innerText = currentUser.email;
+                const rows = [["Telefone", currentUser.phone], ["Endereço", currentUser.address], ["Cidade / UF", currentUser.city], ["CEP", currentUser.cep]];
+                $("accDetails").innerHTML = rows.filter(r => r[1]).map(r => `<div class="flex justify-between gap-4"><span class="text-slate-500">${r[0]}</span><span class="font-semibold text-right">${r[1].replace(/[<>&]/g, "")}</span></div>`).join("") || "Nenhum dado adicional cadastrado.";
+            }
+        }
+        function afterAuth(msg) {
+            updateAuthUI();
+            showToast(msg, "fa-solid fa-circle-check");
+            const go = pendingCheckout;
+            closeAuthModal();
+            if (go) openCheckoutModal();
+        }
+        function prefillCheckout() {
+            if (!currentUser) return;
+            const map = { custName: "name", custEmail: "email", custCpf: "cpf", custPhone: "phone", custAddress: "address", custCity: "city", custCep: "cep" };
+            Object.entries(map).forEach(([id, k]) => { if (!$(id).value && currentUser[k]) $(id).value = currentUser[k]; });
+        }
+
+        async function doRegister() {
+            const email = val("regEmail").toLowerCase(), pass = $("regPass").value;
+            if (val("regName").split(/\s+/).length < 2) return authError("regName", "Informe nome e sobrenome.");
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return authError("regEmail", "E-mail inválido.");
+            if (val("regPhone").replace(/\D/g, "").length < 10) return authError("regPhone", "Telefone inválido.");
+            if (!validCpf(val("regCpf"))) return authError("regCpf", "CPF inválido.");
+            if (val("regCep") && val("regCep").replace(/\D/g, "").length !== 8) return authError("regCep", "CEP inválido.");
+            if (pass.length < 8) return authError("regPass", "A senha precisa ter pelo menos 8 caracteres.");
+            if (pass !== $("regPass2").value) return authError("regPass2", "As senhas não conferem.");
+            if (!$("regTerms").checked) return showToast("Aceite os termos para continuar.", "fa-solid fa-triangle-exclamation");
+            const users = loadUsers();
+            if (users[email]) return authError("regEmail", "Este e-mail já está cadastrado. Faça login.");
+            try {
+                const salt = crypto.getRandomValues(new Uint32Array(2)).join("-");
+                users[email] = { name: val("regName"), email, phone: val("regPhone"), cpf: val("regCpf"), cep: val("regCep"), address: val("regAddress"), city: val("regCity"), salt, hash: await hashPw(pass, salt) };
+                localStorage.setItem(USERS_KEY, JSON.stringify(users));
+                localStorage.setItem(SESSION_KEY, email);
+            } catch (e) { return showToast("Não foi possível salvar o cadastro neste navegador.", "fa-solid fa-triangle-exclamation"); }
+            currentUser = users[email];
+            ["regName", "regEmail", "regPhone", "regCpf", "regCep", "regAddress", "regCity", "regPass", "regPass2"].forEach(id => $(id).value = "");
+            $("regTerms").checked = false;
+            afterAuth(`Conta criada! Bem-vinda, ${currentUser.name.split(" ")[0]}!`);
+        }
+
+        async function doLogin() {
+            const email = val("loginEmail").toLowerCase(), u = loadUsers()[email];
+            if (!u || (await hashPw($("loginPass").value, u.salt)) !== u.hash) return authError("loginPass", "E-mail ou senha incorretos.");
+            currentUser = u;
+            try { localStorage.setItem(SESSION_KEY, email); } catch (e) {}
+            $("loginPass").value = "";
+            afterAuth(`Olá, ${u.name.split(" ")[0]}!`);
+        }
+
+        function doLogout() {
+            currentUser = null;
+            try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+            updateAuthUI();
+            closeAuthModal();
+            showToast("Você saiu da sua conta.", "fa-solid fa-right-from-bracket");
+        }
+        document.addEventListener("DOMContentLoaded", updateAuthUI);
+
+        // Esc closes whatever is open
+        document.addEventListener("keydown", (e) => {
+            if (e.key !== "Escape") return;
+            closeProductModal();
+            closeAuthModal();
+            closeCheckoutModal();
+            if (!document.getElementById("cartPanel").classList.contains("translate-x-full")) toggleCartDrawer();
+        });
+    </script>
+</body>
+</html>
